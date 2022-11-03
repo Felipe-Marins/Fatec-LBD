@@ -54,7 +54,7 @@ insert into TB_Depto values (520,'Depto de Logistica');
 
 insert into TB_Projeto values(100,'App de Compras');
 
-insert into TB_Projeto values(110,'Sistema de LogÌstica');
+insert into TB_Projeto values(110,'Sistema de Log√≠stica');
 
 insert into TB_Projeto values(120,'App de Recrutamento');
 
@@ -114,11 +114,11 @@ where not exists(select codprojeto from TB_FUNCPROJ
                   where tb_funcproj.codprojeto = tb_projeto.codprojeto);
                   
                   
---1. Listar o cÛdigo do funcion·rio, nome do funcion·rio e a qtde de projetos que ele est· alocado, mas sÛ para os funcion·rios alocados em mais de 2 projetos. (0,75)
+--1. Listar o c√≥digo do funcion√°rio, nome do funcion√°rio e a qtde de projetos que ele est√° alocado, mas s√≥ para os funcion√°rios alocados em mais de 2 projetos. (0,75)
 
---2. Alterar o campo BÙnus_sal para 200,00 para todos os funcionarios que trabalham no projeto de descricao = ìAPP Caronaî. (0,75)
+--2. Alterar o campo B√¥nus_sal para 200,00 para todos os funcionarios que trabalham no projeto de descricao = ‚ÄúAPP Carona‚Äù. (0,75)
 
---3. Listar o codigo do projeto que n„o tem funcion·rios alocados criando comandos nas 3 formas: (1,25)
+--3. Listar o codigo do projeto que n√£o tem funcion√°rios alocados criando comandos nas 3 formas: (1,25)
 
 --- Usando o operador not in
 select codprojeto from tb_projeto
