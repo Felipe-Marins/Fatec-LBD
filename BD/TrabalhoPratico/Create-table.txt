@@ -1,0 +1,154 @@
+
+--criando tabelas--
+create table Cliente(
+	Codcliente number(6) not null,
+	CodEndereco number(6),
+	Nome varchar2(40) not null,
+	Telefone varchar2(20),
+	Datanascimento date,
+	CPF varchar2(20)
+);
+
+create table Endereco(
+	CodEndereco number(6) not null,
+	Numero varchar2(5) not null,
+	CEP varchar2(20) not null,
+	Logradouro varchar2(50) not null,
+	Complemento varchar2(50),
+	Cidade varchar2(40)
+);
+
+create table Cli_End(
+	CodCliente number(6) not null,
+	CodEndereco number(6) not null
+);
+
+create table Pedido(
+	CodPedido number(10) not null,
+	CodCliente number(6) not null,
+	CodPagamento number(10),
+	DataPedido date,
+	Frete number(7,2),
+	Desconto number(2),
+	PrecoTotal number(8,2)
+);
+
+create table Pagamento(
+	CodPagamento number(10) not null,
+	DataPagamento date ,
+	FormaPagamento char (1) check (FormaPagamento in('B', 'C'))
+);
+
+create table Cartao(
+	CodPagamento number(10) not null,
+	NumeroCartao varchar2(20) not null,
+	Parcelas number(2),
+	Juros number(4,2),
+	Bandeira varchar2(20)
+);
+
+create table Boleto(
+	CodPagamento number(6) not null,
+	Validade date,
+	Banco varchar2(20),
+	NumCodBarra varchar2(100)
+);
+
+
+create table Item_Ped(
+	CodPedido number(10) not null,
+	CodLivro number(6) not null,
+	Quantidade number(2) not null
+);
+
+create table Livro(
+	CodLivro number(6) not null,
+	CodGenero number(6) not null,
+	CodEditora number(6) not null,
+	CodAutor number(6) not null,
+	Descricao varchar2(250),
+	Titulo varchar2(50) not null,
+	AnoPubli date,
+	Preco number(5,2)
+);
+
+create table Liv_Aut(
+	CodLivro number(6) not null,
+	CodAutor number(6) not null
+);
+
+create table Autores(
+	CodAutor number(6) not null,
+	Nome varchar2(50) not null,
+	Nacionalidade varchar2(20),
+	QtdeObras number(5),
+	DataNascimento date
+	
+);
+
+create table Editora(
+	CodEditora number(6) not null,
+	Endereco varchar2(50),
+	Nome varchar2(40) not null,
+	CNPJ varchar2(20),
+	Contato varchar2(20)
+);
+
+CREATE TABLE Genero
+(	CodGenero number(5) NOT NULL,
+	Nome varchar2(50) NOT NULL
+);
+
+
+
+--Criacao das PKs
+
+ALTER TABLE Cliente ADD CONSTRAINT PK_Cliente_CodCliente PRIMARY KEY(CodCliente);
+
+ALTER TABLE Cli_End ADD CONSTRAINT PK_CliEnd_CliEnd PRIMARY KEY(CodCliente, CodEndereco);
+
+ALTER TABLE Endereco  ADD CONSTRAINT PK_Endereco_CodEndereco PRIMARY KEY(CodEndereco);
+
+ALTER TABLE Boleto ADD CONSTRAINT PK_Boleto_CodPagamento PRIMARY KEY (CodPagamento);
+
+ALTER TABLE Pedido ADD CONSTRAINT PK_Pedido_CodPedido PRIMARY KEY(CodPedido);
+
+ALTER TABLE Pagamento ADD CONSTRAINT PK_Pagamento_CodPagamento PRIMARY KEY (CodPagamento);
+
+ALTER TABLE Item_Ped ADD CONSTRAINT PK_ItemPed_CodPedLiv PRIMARY KEY(CodPedido,CodLivro);
+
+ALTER TABLE  Livro ADD CONSTRAINT PK_Livro_CodLivro PRIMARY KEY(CodLivro);
+
+ALTER TABLE Autores ADD CONSTRAINT PK_Autores_CodAutor PRIMARY KEY (CodAutor);
+
+ALTER TABLE Genero ADD CONSTRAINT PK_Genero_CodGenero PRIMARY KEY (CodGenero);
+
+ALTER TABLE Editora ADD CONSTRAINT PK_Editora_CodEditora PRIMARY KEY (CodEditora);
+
+ALTER TABLE Liv_Aut ADD CONSTRAINT PK_LivAut_CodLivroAutor PRIMARY KEY (CodLivro, CodAutor);
+
+--CRIAÇÃO DAS FOREIGNS KEYS E CONSTRAINTS.
+
+ALTER TABLE Cli_End ADD CONSTRAINT FK_CliEnd_CodCliente FOREIGN KEY(CodCliente) REFERENCES Cliente;
+
+ALTER TABLE Cli_End ADD CONSTRAINT FK_CliEnd_CodEndereco FOREIGN KEY(CodEndereco) REFERENCES Endereco;
+
+ALTER TABLE Liv_Aut ADD CONSTRAINT FK_LivAut_CodAutor FOREIGN KEY (CodAutor) REFERENCES Autores;
+
+ALTER TABLE Boleto ADD CONSTRAINT FK_Boleto_CodPagamento FOREIGN KEY (CodPagamento) REFERENCES Pagamento;
+
+ALTER TABLE Livro ADD CONSTRAINT FK_Livro_CodEditora FOREIGN KEY(CodEditora) REFERENCES Editora;
+
+ALTER TABLE Livro ADD CONSTRAINT FK_Livro_CodGenero FOREIGN KEY(CodGenero) REFERENCES Genero;
+
+ALTER TABLE Livro ADD CONSTRAINT FK_Livro_CodAutor FOREIGN KEY(CodAutor) REFERENCES Autores;
+
+ALTER TABLE  Item_Ped ADD CONSTRAINT FK_ItemPed_CodPedido FOREIGN KEY(CodPedido) REFERENCES Pedido;
+
+ALTER TABLE  Item_Ped ADD CONSTRAINT FK_ItemPed_CodLivro FOREIGN KEY(CodLivro) REFERENCES Livro;
+
+ALTER TABLE  Cartao ADD CONSTRAINT FK_Cartao_CodPagamento FOREIGN KEY(CodPagamento) REFERENCES Pagamento;
+
+ALTER TABLE Pedido ADD CONSTRAINT FK_Pedido_CodPagamento FOREIGN KEY(CodPagamento) REFERENCES Pagamento;
+
+ALTER TABLE Pedido ADD CONSTRAINT FK_Pedido_CodCliente FOREIGN KEY(CodCliente) REFERENCES Cliente;
